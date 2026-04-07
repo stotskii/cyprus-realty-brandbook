@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lime Mockups — Cyprus Realty</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&display=swap');
+
+  :root {
+    --font-display: 'Fraunces', serif;
+    --font-body: 'Instrument Sans', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-body);
+    background: #0b0b0f;
+    color: #c8c8cc;
+  }
+
+  /* === NAVIGATION === */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 24px;
+    background: #0b0b0fdd;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid #1a1a1f;
+    overflow-x: auto;
+  }
+  .top-nav a {
+    color: #666;
+    text-decoration: none;
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .top-nav a:hover { color: #fff; background: #ffffff08; }
+  .top-nav a.back {
+    color: #84cc16;
+    margin-right: 8px;
+    padding-left: 0;
+  }
+  .top-nav .sep {
+    width: 1px;
+    height: 16px;
+    background: #222;
+    margin: 0 4px;
+  }
+  .nav-pill {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+
+  /* === SECTION WRAPPER === */
+  .mockup-section {
+    min-height: 100vh;
+    padding: 0;
+    position: relative;
+  }
+  .mockup-section + .mockup-section {
+    border-top: 1px solid #1a1a1f;
+  }
+
+  /* === SECTION HEADER === */
+  .section-label {
+    padding: 32px 40px 0;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+  .section-label h2 {
+    font-family: var(--font-display);
+    font-size: clamp(20px, 2.5vw, 28px);
+    font-weight: 600;
+    color: #fff;
+  }
+  .section-label .theory {
+    font-size: 12px;
+    color: #555;
+  }
+  .section-label .palette-dots {
+    display: flex;
+    gap: 4px;
+    margin-left: auto;
+  }
+  .section-label .pdot {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 1px solid #333;
+  }
+
+  /* === MOCKUP FRAME === */
+  .frame {
+    margin: 20px 40px 48px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #222;
+    box-shadow: 0 20px 80px #00000060;
+  }
+  .frame-bar {
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    gap: 8px;
+    font-size: 11px;
+  }
+  .frame-dots {
+    display: flex;
+    gap: 6px;
+  }
+  .frame-dots span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ffffff15;
+  }
+  .frame-url {
+    flex: 1;
+    text-align: center;
+    opacity: 0.4;
+    font-size: 11px;
+  }
+
+  /* === INNER PAGE TEMPLATE === */
+  .page {
+    min-height: 560px;
+  }
+
+  /* Shared inner layout */
+  .page-nav {
+    display: flex;
+    align-items: center;
+    padding: 14px 32px;
+    gap: 24px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .page-nav .logo {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.5px;
+    margin-right: auto;
+  }
+  .page-nav a {
+    text-decoration: none;
+    opacity: 0.6;
+    transition: opacity 0.15s;
+    font-size: 13px;
+  }
+  .page-nav a:hover { opacity: 1; }
+  .page-nav .nav-cta {
+    padding: 7px 18px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 12px;
+    opacity: 1;
+  }
+
+  .hero {
+    padding: 48px 32px 40px;
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+  }
+  .hero p {
+    max-width: 480px;
+    line-height: 1.6;
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  .search-row {
+    display: flex;
+    gap: 0;
+    max-width: 600px;
+  }
+  .search-row input {
+    flex: 1;
+    padding: 12px 18px;
+    border: none;
+    font-size: 14px;
+    font-family: var(--font-body);
+    outline: none;
+  }
+  .search-row button {
+    padding: 12px 28px;
+    border: none;
+    font-weight: 600;
+    font-size: 13px;
+    font-family: var(--font-body);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding: 0 32px 32px;
+  }
+  .prop-card {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .prop-img {
+    height: 120px;
+    position: relative;
+  }
+  .prop-img .badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .prop-body {
+    padding: 12px 14px;
+  }
+  .prop-price {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+  .prop-loc {
+    font-size: 12px;
+    opacity: 0.5;
+    margin-bottom: 8px;
+  }
+  .prop-tags {
+    display: flex;
+    gap: 6px;
+  }
+  .prop-tag {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 500;
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 32px;
+    padding: 24px 32px;
+    font-size: 12px;
+  }
+  .stat-num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+  .stat-label {
+    opacity: 0.45;
+    font-size: 11px;
+  }
+
+  /* ======================================
+     THEME 1 — Lime + Charcoal (Premium)
+     ====================================== */
+  .t1 { --lime: #84cc16; --lime-dk: #65a30d; --bg: #171c24; --surface: #1e2430; --text: #dfe3ea; --muted: #6b7a90; }
+  .t1 .frame-bar { background: #10141a; color: #6b7a90; }
+  .t1 .page { background: var(--bg); color: var(--text); }
+  .t1 .page-nav { color: var(--text); border-bottom: 1px solid #252b36; }
+  .t1 .page-nav .logo { color: var(--lime); }
+  .t1 .page-nav a { color: var(--muted); }
+  .t1 .page-nav .nav-cta { background: var(--lime); color: #0a0f00; }
+  .t1 .hero h1 { font-size: clamp(28px, 3vw, 38px); color: #fff; }
+  .t1 .hero p { color: var(--muted); }
+  .t1 .search-row input { background: var(--surface); color: var(--text); border-radius: 8px 0 0 8px; }
+  .t1 .search-row input::placeholder { color: var(--muted); }
+  .t1 .search-row button { background: var(--lime); color: #0a0f00; border-radius: 0 8px 8px 0; }
+  .t1 .prop-card { background: var(--surface); }
+  .t1 .prop-img { background: linear-gradient(135deg, #252b36, #1a2030); }
+  .t1 .prop-img .badge { background: var(--lime); color: #0a0f00; }
+  .t1 .prop-price { color: #fff; }
+  .t1 .prop-tag { background: #252b36; color: var(--muted); }
+  .t1 .stat-num { color: var(--lime); }
+  .t1 .stats-row { border-top: 1px solid #252b36; }
+
+  /* ======================================
+     THEME 2 — Lime + Warm White (Light)
+     ====================================== */
+  .t2 { --lime: #65a30d; --lime-light: #ecfccb; --bg: #faf9f6; --surface: #fff; --text: #1c1917; --muted: #78716c; --border: #e7e5e4; }
+  .t2 .frame-bar { background: #f0eeeb; color: var(--muted); }
+  .t2 .page { background: var(--bg); color: var(--text); }
+  .t2 .page-nav { color: var(--text); border-bottom: 1px solid var(--border); }
+  .t2 .page-nav .logo { color: var(--lime); }
+  .t2 .page-nav a { color: var(--muted); }
+  .t2 .page-nav .nav-cta { background: var(--lime); color: #fff; }
+  .t2 .hero { background: linear-gradient(170deg, var(--lime-light) 0%, var(--bg) 60%); }
+  .t2 .hero h1 { font-size: clamp(28px, 3vw, 38px); color: var(--text); }
+  .t2 .hero p { color: var(--muted); }
+  .t2 .search-row input { background: var(--surface); color: var(--text); border: 1px solid var(--border); border-right: none; border-radius: 8px 0 0 8px; }
+  .t2 .search-row input::placeholder { color: #a8a29e; }
+  .t2 .search-row button { background: var(--lime); color: #fff; border-radius: 0 8px 8px 0; }
+  .t2 .prop-card { background: var(--surface); border: 1px solid var(--border); }
+  .t2 .prop-img { background: linear-gradient(135deg, #e7e5e4, #d6d3d1); }
+  .t2 .prop-img .badge { background: var(--lime); color: #fff; }
+  .t2 .prop-price { color: var(--text); }
+  .t2 .prop-tag { background: var(--lime-light); color: var(--lime); }
+  .t2 .stat-num { color: var(--lime); }
+  .t2 .stats-row { border-top: 1px solid var(--border); }
+
+  /* ======================================
+     THEME 3 — Lime + Violet (Contrast)
+     ====================================== */
+  .t3 { --lime: #84cc16; --violet: #7c3aed; --violet-dk: #5b21b6; --bg: #0f0b1e; --surface: #17122a; --text: #e0ddf0; --muted: #7a75a0; }
+  .t3 .frame-bar { background: #0a0816; color: var(--muted); }
+  .t3 .page { background: var(--bg); color: var(--text); }
+  .t3 .page-nav { color: var(--text); border-bottom: 1px solid #231d3a; }
+  .t3 .page-nav .logo { color: var(--lime); }
+  .t3 .page-nav a { color: var(--muted); }
+  .t3 .page-nav .nav-cta { background: var(--lime); color: #0a0f00; }
+  .t3 .hero { position: relative; }
+  .t3 .hero::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: 0;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, #7c3aed18, transparent 70%);
+    pointer-events: none;
+  }
+  .t3 .hero h1 { font-size: clamp(28px, 3vw, 38px); color: #fff; }
+  .t3 .hero p { color: var(--muted); }
+  .t3 .search-row input { background: var(--surface); color: var(--text); border: 1px solid #2a2444; border-right: none; border-radius: 8px 0 0 8px; }
+  .t3 .search-row input::placeholder { color: var(--muted); }
+  .t3 .search-row button { background: var(--lime); color: #0a0f00; border-radius: 0 8px 8px 0; }
+  .t3 .prop-card { background: var(--surface); border: 1px solid #231d3a; }
+  .t3 .prop-img { background: linear-gradient(135deg, #1e1836, #2a1f48); }
+  .t3 .prop-img .badge { background: var(--violet); color: #fff; }
+  .t3 .prop-price { color: #fff; }
+  .t3 .prop-loc { color: var(--muted); }
+  .t3 .prop-tag { background: #231d3a; color: var(--muted); }
+  .t3 .stat-num { color: var(--lime); }
+  .t3 .stats-row { border-top: 1px solid #231d3a; }
+
+  /* ======================================
+     THEME 4 — Lime + Emerald + Teal
+     ====================================== */
+  .t4 { --lime: #84cc16; --emerald: #10b981; --teal: #0d9488; --bg: #0a1410; --surface: #0f1e18; --text: #d4ede2; --muted: #5d8a76; }
+  .t4 .frame-bar { background: #070f0b; color: var(--muted); }
+  .t4 .page { background: var(--bg); color: var(--text); }
+  .t4 .page-nav { color: var(--text); border-bottom: 1px solid #162820; }
+  .t4 .page-nav .logo { color: var(--lime); }
+  .t4 .page-nav a { color: var(--muted); }
+  .t4 .page-nav .nav-cta { background: var(--emerald); color: #fff; }
+  .t4 .hero h1 { font-size: clamp(28px, 3vw, 38px); color: #fff; }
+  .t4 .hero p { color: var(--muted); }
+  .t4 .search-row input { background: var(--surface); color: var(--text); border: 1px solid #1a3028; border-right: none; border-radius: 8px 0 0 8px; }
+  .t4 .search-row input::placeholder { color: var(--muted); }
+  .t4 .search-row button { background: var(--lime); color: #0a0f00; border-radius: 0 8px 8px 0; }
+  .t4 .prop-card { background: var(--surface); border: 1px solid #162820; }
+  .t4 .prop-img { background: linear-gradient(135deg, #112a20, #0a201a); }
+  .t4 .prop-img .badge { background: var(--emerald); color: #fff; }
+  .t4 .prop-price { color: #fff; }
+  .t4 .prop-tag { background: #162820; color: var(--teal); }
+  .t4 .stat-num { color: var(--emerald); }
+  .t4 .stats-row { border-top: 1px solid #162820; }
+
+  /* ======================================
+     THEME 5 — Lime + Graphite + Gold (Luxury)
+     ====================================== */
+  .t5 { --lime: #84cc16; --gold: #b8860b; --gold-light: #d4a843; --bg: #f5f3ef; --surface: #fff; --text: #1c1917; --muted: #78716c; --border: #e2dfd8; --dark: #1c1917; }
+  .t5 .frame-bar { background: #eae7e1; color: var(--muted); }
+  .t5 .page { background: var(--bg); color: var(--text); }
+  .t5 .page-nav { color: var(--text); border-bottom: 1px solid var(--border); background: var(--dark); }
+  .t5 .page-nav .logo { color: var(--gold-light); }
+  .t5 .page-nav a { color: #a8a29e; }
+  .t5 .page-nav .nav-cta { background: var(--lime); color: #0a0f00; }
+  .t5 .hero h1 { font-size: clamp(28px, 3vw, 38px); color: var(--text); }
+  .t5 .hero p { color: var(--muted); }
+  .t5 .search-row input { background: var(--surface); color: var(--text); border: 1px solid var(--border); border-right: none; border-radius: 8px 0 0 8px; }
+  .t5 .search-row input::placeholder { color: #a8a29e; }
+  .t5 .search-row button { background: var(--lime); color: #0a0f00; border-radius: 0 8px 8px 0; }
+  .t5 .cards-label {
+    padding: 0 32px 8px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+  .t5 .cards-label.lux { color: var(--gold); }
+  .t5 .cards-label.std { color: var(--lime); }
+  .t5 .prop-card { background: var(--surface); border: 1px solid var(--border); }
+  .t5 .prop-card.luxury { border-color: var(--gold); }
+  .t5 .prop-card.luxury .prop-img { background: linear-gradient(135deg, #2c2418, #1a1408); }
+  .t5 .prop-card.luxury .prop-img .badge { background: var(--gold); color: #fff; }
+  .t5 .prop-card.luxury .prop-price { color: var(--gold); }
+  .t5 .prop-img { background: linear-gradient(135deg, #e2dfd8, #ccc8be); }
+  .t5 .prop-img .badge { background: var(--lime); color: #0a0f00; }
+  .t5 .prop-price { color: var(--text); }
+  .t5 .prop-tag { background: #f0eee8; color: var(--muted); }
+  .t5 .prop-card.luxury .prop-tag { background: #2a2418; color: var(--gold-light); }
+  .t5 .stat-num { color: var(--lime); }
+  .t5 .stats-row { border-top: 1px solid var(--border); }
+
+  /* Annotations */
+  .annotation {
+    padding: 12px 40px 32px;
+    font-size: 12px;
+    color: #555;
+    line-height: 1.6;
+    max-width: 700px;
+  }
+  .annotation strong { color: #999; }
+
+  @media (max-width: 800px) {
+    .frame { margin: 16px; }
+    .section-label { padding: 24px 16px 0; flex-wrap: wrap; }
+    .cards-grid { grid-template-columns: 1fr; }
+    .stats-row { flex-wrap: wrap; }
+    .annotation { padding: 12px 16px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav class="top-nav">
+  <a href="lime-palettes.html" class="back">&larr; Палитры</a>
+  <div class="sep"></div>
+  <a href="#t1"><span class="nav-pill" style="background:#1e2430"></span>Антрацит</a>
+  <a href="#t2"><span class="nav-pill" style="background:#faf9f6;border:1px solid #ddd"></span>Тёплый свет</a>
+  <a href="#t3"><span class="nav-pill" style="background:#7c3aed"></span>Фиолет</a>
+  <a href="#t4"><span class="nav-pill" style="background:#10b981"></span>Изумруд</a>
+  <a href="#t5"><span class="nav-pill" style="background:#b8860b"></span>Золото</a>
+</nav>
+
+<!-- ===== THEME 1: LIME + CHARCOAL ===== -->
+<section class="mockup-section" id="t1">
+  <div class="section-label">
+    <h2>Lime + Антрацит</h2>
+    <span class="theory">Премиальный минимализм</span>
+    <div class="palette-dots">
+      <div class="pdot" style="background:#84cc16"></div>
+      <div class="pdot" style="background:#1e2430"></div>
+      <div class="pdot" style="background:#334155"></div>
+      <div class="pdot" style="background:#dfe3ea"></div>
+    </div>
+  </div>
+
+  <div class="frame t1">
+    <div class="frame-bar">
+      <div class="frame-dots"><span></span><span></span><span></span></div>
+      <div class="frame-url">cyprusrealty.com</div>
+    </div>
+    <div class="page">
+      <nav class="page-nav">
+        <div class="logo">cyprus<span style="opacity:0.4">realty</span></div>
+        <a>Buy</a><a>Rent</a><a>New Homes</a><a>Map</a>
+        <span class="nav-cta">List property</span>
+      </nav>
+      <div class="hero">
+        <h1>Find your place<br>in Cyprus</h1>
+        <p>114,000+ verified listings across every city and village. Updated hourly from 76 sources.</p>
+        <div class="search-row">
+          <input type="text" placeholder="Limassol, Paphos, Nicosia..." readonly>
+          <button>Search</button>
+        </div>
+      </div>
+      <div class="cards-grid"></div>
+      <div class="stats-row">
+        <div><div class="stat-num">114K</div><div class="stat-label">Listings</div></div>
+        <div><div class="stat-num">76</div><div class="stat-label">Sources</div></div>
+        <div><div class="stat-num">6</div><div class="stat-label">Cities</div></div>
+        <div><div class="stat-num">1h</div><div class="stat-label">Update cycle</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="annotation">
+    <strong>Когда использовать:</strong> Если бренд позиционируется как серьёзный, data-driven агрегатор. Лайм выступает единственным акцентом — кнопки, ссылки, цены. Всё остальное в сдержанных серо-синих тонах. Напоминает Bloomberg или финтех.
+  </div>
+</section>
+
+<!-- ===== THEME 2: LIME + WARM WHITE ===== -->
+<section class="mockup-section" id="t2">
+  <div class="section-label">
+    <h2>Lime + Тёплый свет</h2>
+    <span class="theory">Средиземноморский уют</span>
+    <div class="palette-dots">
+      <div class="pdot" style="background:#65a30d"></div>
+      <div class="pdot" style="background:#ecfccb"></div>
+      <div class="pdot" style="background:#faf9f6"></div>
+      <div class="pdot" style="background:#1c1917"></div>
+    </div>
+  </div>
+
+  <div class="frame t2">
+    <div class="frame-bar">
+      <div class="frame-dots"><span></span><span></span><span></span></div>
+      <div class="frame-url">cyprusrealty.com</div>
+    </div>
+    <div class="page">
+      <nav class="page-nav">
+        <div class="logo">cyprus<span style="opacity:0.4">realty</span></div>
+        <a>Buy</a><a>Rent</a><a>New Homes</a><a>Map</a>
+        <span class="nav-cta">List property</span>
+      </nav>
+      <div class="hero">
+        <h1>Your home<br>under the sun</h1>
+        <p>Every listing in Cyprus, from beachfront villas to city apartments. All in one place.</p>
+        <div class="search-row">
+          <input type="text" placeholder="Where in Cyprus?" readonly>
+          <button>Search</button>
+        </div>
+      </div>
+      <div class="cards-grid"></div>
+      <div class="stats-row">
+        <div><div class="stat-num">114K</div><div class="stat-label">Listings</div></div>
+        <div><div class="stat-num">76</div><div class="stat-label">Sources</div></div>
+        <div><div class="stat-num">6</div><div class="stat-label">Cities</div></div>
+        <div><div class="stat-num">1h</div><div class="stat-label">Update cycle</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="annotation">
+    <strong>Когда использовать:</strong> Для аудитории покупателей — экспатов, пенсионеров, инвесторов ищущих тепло и уют. Светлый, приятный интерфейс. Лайм-градиент в хедере отсылает к кипрским холмам. Доверительный, не агрессивный.
+  </div>
+</section>
+
+<!-- ===== THEME 3: LIME + VIOLET ===== -->
+<section class="mockup-section" id="t3">
+  <div class="section-label">
+    <h2>Lime + Фиолет</h2>
+    <span class="theory">Максимальный контраст</span>
+    <div class="palette-dots">
+      <div class="pdot" style="background:#84cc16"></div>
+      <div class="pdot" style="background:#7c3aed"></div>
+      <div class="pdot" style="background:#17122a"></div>
+      <div class="pdot" style="background:#e0ddf0"></div>
+    </div>
+  </div>
+
+  <div class="frame t3">
+    <div class="frame-bar">
+      <div class="frame-dots"><span></span><span></span><span></span></div>
+      <div class="frame-url">cyprusrealty.com</div>
+    </div>
+    <div class="page">
+      <nav class="page-nav">
+        <div class="logo">cyprus<span style="opacity:0.4">realty</span></div>
+        <a>Buy</a><a>Rent</a><a>New Homes</a><a>Map</a>
+        <span class="nav-cta">List property</span>
+      </nav>
+      <div class="hero">
+        <h1>Smarter way to<br>find property</h1>
+        <p>AI-powered search across 76 sources. Compare prices, track trends, get alerts.</p>
+        <div class="search-row">
+          <input type="text" placeholder="Search by location, ID, or keyword..." readonly>
+          <button>Search</button>
+        </div>
+      </div>
+      <div class="cards-grid"></div>
+      <div class="stats-row">
+        <div><div class="stat-num">114K</div><div class="stat-label">Listings</div></div>
+        <div><div class="stat-num">76</div><div class="stat-label">Sources</div></div>
+        <div><div class="stat-num">6</div><div class="stat-label">Cities</div></div>
+        <div><div class="stat-num">1h</div><div class="stat-label">Update cycle</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="annotation">
+    <strong>Когда использовать:</strong> Для tech-savvy аудитории и позиционирования как AI/data продукта. Фиолет — премиум, лайм — action. Запоминается моментально. Ни один конкурент на Кипре не использует ничего подобного. Рискованный, но уникальный.
+  </div>
+</section>
+
+<!-- ===== THEME 4: LIME + EMERALD ===== -->
+<section class="mockup-section" id="t4">
+  <div class="section-label">
+    <h2>Lime + Изумруд + Тил</h2>
+    <span class="theory">Природная палитра Кипра</span>
+    <div class="palette-dots">
+      <div class="pdot" style="background:#84cc16"></div>
+      <div class="pdot" style="background:#10b981"></div>
+      <div class="pdot" style="background:#0d9488"></div>
+      <div class="pdot" style="background:#0f1e18"></div>
+    </div>
+  </div>
+
+  <div class="frame t4">
+    <div class="frame-bar">
+      <div class="frame-dots"><span></span><span></span><span></span></div>
+      <div class="frame-url">cyprusrealty.com</div>
+    </div>
+    <div class="page">
+      <nav class="page-nav">
+        <div class="logo">cyprus<span style="opacity:0.4">realty</span></div>
+        <a>Buy</a><a>Rent</a><a>New Homes</a><a>Map</a>
+        <span class="nav-cta">List property</span>
+      </nav>
+      <div class="hero">
+        <h1>Discover Cyprus<br>property</h1>
+        <p>From Troodos mountains to the coast — every listing, every source, one search.</p>
+        <div class="search-row">
+          <input type="text" placeholder="Paphos, Larnaca, Famagusta..." readonly>
+          <button>Search</button>
+        </div>
+      </div>
+      <div class="cards-grid"></div>
+      <div class="stats-row">
+        <div><div class="stat-num">114K</div><div class="stat-label">Listings</div></div>
+        <div><div class="stat-num">76</div><div class="stat-label">Sources</div></div>
+        <div><div class="stat-num">6</div><div class="stat-label">Cities</div></div>
+        <div><div class="stat-num">1h</div><div class="stat-label">Update cycle</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="annotation">
+    <strong>Когда использовать:</strong> Органичный и тёплый вариант. Зелень холмов + бирюза моря = Кипр. Три оттенка зелёного создают глубину без пестроты. Хорош для аудитории, ценящей природу и lifestyle. Может конкурировать ощущениями с Rightmove (тил) но на другой волне.
+  </div>
+</section>
+
+<!-- ===== THEME 5: LIME + GOLD (LUXURY) ===== -->
+<section class="mockup-section" id="t5">
+  <div class="section-label">
+    <h2>Lime + Графит + Золото</h2>
+    <span class="theory">Два сегмента: mass + luxury</span>
+    <div class="palette-dots">
+      <div class="pdot" style="background:#84cc16"></div>
+      <div class="pdot" style="background:#b8860b"></div>
+      <div class="pdot" style="background:#1c1917"></div>
+      <div class="pdot" style="background:#f5f3ef"></div>
+    </div>
+  </div>
+
+  <div class="frame t5">
+    <div class="frame-bar">
+      <div class="frame-dots"><span></span><span></span><span></span></div>
+      <div class="frame-url">cyprusrealty.com</div>
+    </div>
+    <div class="page">
+      <nav class="page-nav" style="color:#a8a29e">
+        <div class="logo">cyprus<span style="opacity:0.4">realty</span></div>
+        <a>Buy</a><a>Rent</a><a>New Homes</a><a>Luxury</a>
+        <span class="nav-cta">List property</span>
+      </nav>
+      <div class="hero">
+        <h1>Every property<br>in Cyprus</h1>
+        <p>Mass-market to ultra-luxury. 76 sources aggregated, analyzed, and updated hourly.</p>
+        <div class="search-row">
+          <input type="text" placeholder="Search all of Cyprus..." readonly>
+          <button>Search</button>
+        </div>
+      </div>
+      <div class="cards-label lux">Luxury Collection</div>
+      <div class="cards-grid" id="luxCards"></div>
+      <div class="cards-label std" style="margin-top:16px">All Listings</div>
+      <div class="cards-grid" id="stdCards"></div>
+      <div class="stats-row">
+        <div><div class="stat-num">114K</div><div class="stat-label">Listings</div></div>
+        <div><div class="stat-num">76</div><div class="stat-label">Sources</div></div>
+        <div><div class="stat-num">6</div><div class="stat-label">Cities</div></div>
+        <div><div class="stat-num">1h</div><div class="stat-label">Update cycle</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="annotation">
+    <strong>Когда использовать:</strong> Если хочешь обслуживать и mass-market и luxury. Золото = premium сегмент (Savills, Sotheby's территория), лайм = основной продукт. Две визуальные системы в одном бренде. Сложнее в реализации, но позволяет расти в оба направления.
+  </div>
+</section>
+
+<script>
+// Populate property cards
+const listings = [
+  { price: "€285,000", loc: "Limassol, Agios Tychonas", beds: "3 bed", area: "120 m²", tag: "New" },
+  { price: "€165,000", loc: "Paphos, Kato Paphos", beds: "2 bed", area: "85 m²", tag: "Reduced" },
+  { price: "€420,000", loc: "Larnaca, Mackenzie", beds: "4 bed", area: "180 m²", tag: "Sea view" },
+];
+const luxListings = [
+  { price: "€2,850,000", loc: "Limassol, Amathus", beds: "5 bed", area: "380 m²", tag: "Exclusive" },
+  { price: "€1,200,000", loc: "Paphos, Sea Caves", beds: "4 bed", area: "250 m²", tag: "Villa" },
+  { price: "€3,400,000", loc: "Limassol Marina", beds: "4 bed", area: "290 m²", tag: "Penthouse" },
+];
+
+function fillCards(grid, items, isLux) {
+  items.forEach(l => {
+    const card = document.createElement('div');
+    card.className = 'prop-card' + (isLux ? ' luxury' : '');
+    card.innerHTML = `
+      <div class="prop-img"><span class="badge">${l.tag}</span></div>
+      <div class="prop-body">
+        <div class="prop-price">${l.price}</div>
+        <div class="prop-loc">${l.loc}</div>
+        <div class="prop-tags">
+          <span class="prop-tag">${l.beds}</span>
+          <span class="prop-tag">${l.area}</span>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+document.querySelectorAll('.cards-grid:not(#luxCards):not(#stdCards)').forEach(g => fillCards(g, listings, false));
+fillCards(document.getElementById('luxCards'), luxListings, true);
+fillCards(document.getElementById('stdCards'), listings, false);
+</script>
+
+</body>
+</html>
