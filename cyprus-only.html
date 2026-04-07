@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyprus Real Estate — Только Кипр</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0e12;
+    color: #e0e0e0;
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    line-height: 1.5;
+  }
+
+  a { color: #7eb8ff; text-decoration: none; transition: color .2s; }
+  a:hover { color: #b0d4ff; }
+
+  /* ---- NAV ---- */
+  .nav {
+    display: flex;
+    gap: 24px;
+    padding: 18px 40px;
+    border-bottom: 1px solid #1e1e28;
+    background: #111118;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    align-items: center;
+  }
+  .nav-brand {
+    font-weight: 700;
+    font-size: 15px;
+    color: #fff;
+    margin-right: auto;
+    letter-spacing: -.3px;
+  }
+  .nav a {
+    font-size: 14px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    transition: background .2s, color .2s;
+  }
+  .nav a:hover { background: #1e1e28; }
+  .nav a.active {
+    background: #1c2a3a;
+    color: #7eb8ff;
+    font-weight: 600;
+  }
+
+  /* ---- HEADER ---- */
+  .header {
+    text-align: center;
+    padding: 48px 40px 32px;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -.5px;
+  }
+  .header h1 span { color: #4fc3f7; }
+  .header p {
+    margin-top: 8px;
+    font-size: 16px;
+    color: #888;
+    font-weight: 400;
+  }
+
+  /* ---- MAIN LAYOUT ---- */
+  .main {
+    display: flex;
+    gap: 48px;
+    padding: 0 40px 48px;
+    max-width: 1400px;
+    margin: 0 auto;
+    align-items: flex-start;
+  }
+
+  /* ---- TABLE ---- */
+  .table-wrap {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  thead th {
+    text-align: left;
+    padding: 10px 12px;
+    font-weight: 600;
+    color: #888;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    border-bottom: 1px solid #1e1e28;
+    white-space: nowrap;
+  }
+  tbody tr {
+    transition: background .15s;
+  }
+  tbody tr:hover { background: #16161e; }
+  tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #141418;
+    vertical-align: middle;
+  }
+  td.num { color: #555; font-size: 12px; font-weight: 500; text-align: center; width: 30px; }
+  td.name-cell { font-weight: 600; color: #fff; white-space: nowrap; }
+  .tier-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .tier-1 { background: #2a1f00; color: #f8c300; }
+  .tier-2 { background: #0d1f30; color: #4fc3f7; }
+  .tier-3 { background: #1a1a22; color: #888; }
+
+  .colors-cell {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+  .swatch {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    border: 1px solid rgba(255,255,255,.08);
+    cursor: pointer;
+    position: relative;
+    transition: transform .15s;
+  }
+  .swatch:hover { transform: scale(1.3); z-index: 2; }
+  .swatch-tooltip {
+    display: none;
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #222;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 10;
+  }
+  .swatch:hover .swatch-tooltip { display: block; }
+
+  td.hue-cell {
+    font-family: 'DM Sans', monospace;
+    font-size: 13px;
+    color: #666;
+    text-align: center;
+  }
+  td.type-cell {
+    font-size: 13px;
+    color: #888;
+    white-space: nowrap;
+  }
+
+  /* ---- WHEEL ---- */
+  .wheel-wrap {
+    flex-shrink: 0;
+    width: 540px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 8px;
+  }
+  .wheel-container {
+    position: relative;
+    width: 500px;
+    height: 500px;
+  }
+  .wheel-bg {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(
+      hsl(0,85%,55%), hsl(30,85%,55%), hsl(60,85%,55%),
+      hsl(90,85%,55%), hsl(120,85%,55%), hsl(150,85%,55%),
+      hsl(180,85%,55%), hsl(210,85%,55%), hsl(240,85%,55%),
+      hsl(270,85%,55%), hsl(300,85%,55%), hsl(330,85%,55%),
+      hsl(360,85%,55%)
+    );
+    opacity: 0.12;
+  }
+  .wheel-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.06);
+  }
+
+  /* hue labels */
+  .hue-label {
+    position: absolute;
+    font-size: 10px;
+    font-weight: 500;
+    color: rgba(255,255,255,.35);
+    white-space: nowrap;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+  }
+
+  /* free zone circles */
+  .free-zone {
+    position: absolute;
+    border: 2px dashed #4caf50;
+    border-radius: 50%;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .free-zone-label {
+    position: absolute;
+    font-size: 10px;
+    font-weight: 600;
+    color: #4caf50;
+    white-space: nowrap;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    opacity: .7;
+  }
+
+  /* brand dots */
+  .dot {
+    position: absolute;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,.25);
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+  }
+  .dot:hover {
+    transform: translate(-50%, -50%) scale(1.25);
+    box-shadow: 0 0 16px rgba(255,255,255,.3);
+    z-index: 20;
+  }
+  .dot-label {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 3px;
+    font-size: 9px;
+    font-weight: 600;
+    color: rgba(255,255,255,.7);
+    white-space: nowrap;
+    pointer-events: none;
+    text-shadow: 0 1px 4px rgba(0,0,0,.8);
+  }
+
+  /* ---- SUMMARY ---- */
+  .summary {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px 60px;
+  }
+  .summary-box {
+    background: #13131a;
+    border: 1px solid #1e1e28;
+    border-radius: 12px;
+    padding: 32px;
+  }
+  .summary-box h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 20px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .summary-section h3 {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    margin-bottom: 12px;
+  }
+  .summary-section h3.danger { color: #ef5350; }
+  .summary-section h3.success { color: #66bb6a; }
+  .zone-card {
+    background: #18181f;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border-left: 3px solid;
+  }
+  .zone-card.overloaded { border-color: #ef5350; }
+  .zone-card.free { border-color: #66bb6a; }
+  .zone-title {
+    font-weight: 600;
+    font-size: 14px;
+    color: #ccc;
+    margin-bottom: 6px;
+  }
+  .zone-desc {
+    font-size: 13px;
+    color: #888;
+    line-height: 1.6;
+  }
+  .zone-brands {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .zone-brand-tag {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: #1e1e28;
+    color: #aaa;
+    font-weight: 500;
+  }
+  .rec-swatch-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    align-items: center;
+  }
+  .rec-swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,.1);
+    position: relative;
+    cursor: pointer;
+  }
+  .rec-swatch:hover .swatch-tooltip { display: block; }
+  .rec-swatch .swatch-tooltip {
+    display: none;
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #222;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  /* ---- FOOTER ---- */
+  .footer {
+    text-align: center;
+    padding: 20px;
+    color: #444;
+    font-size: 12px;
+    border-top: 1px solid #1a1a22;
+  }
+
+  @media (max-width: 1100px) {
+    .main { flex-direction: column; align-items: center; }
+    .wheel-wrap { width: 100%; }
+    .summary-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <span class="nav-brand">CY Realty Brandbook</span>
+  <a href="index.html">Все бренды</a>
+  <a href="cyprus-only.html" class="active">Только Кипр</a>
+  <a href="international.html">International</a>
+</nav>
+
+<header class="header">
+  <h1>Cyprus Real Estate — <span>Только Кипр</span></h1>
+  <p>18 кипрских площадок и агентств</p>
+</header>
+
+<section class="main">
+  <div class="table-wrap">
+    <table id="brandTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Site</th>
+          <th>Colors</th>
+          <th>Hue</th>
+          <th>Type</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <div class="wheel-wrap">
+    <div class="wheel-container" id="wheel">
+      <div class="wheel-bg"></div>
+      <div class="wheel-ring"></div>
+    </div>
+  </div>
+</section>
+
+<section class="summary">
+  <div class="summary-box">
+    <h2>Анализ цветового пространства</h2>
+    <div class="summary-grid">
+      <div class="summary-section">
+        <h3 class="danger">Перегруженные зоны</h3>
+        <div id="overloadedZones"></div>
+      </div>
+      <div class="summary-section">
+        <h3 class="success">Свободные зоны — рекомендации</h3>
+        <div id="freeZones"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  Cyprus Real Estate Brandbook &middot; Color Wheel Analysis &middot; 2026
+</footer>
+
+<script>
+const sites = [
+  { name: "Bazaraki", tier: 1, colors: ["#F8C300","#A4C2F4"], type: "Классифайд #1", hue: 48 },
+  { name: "DOM.com.cy", tier: 1, colors: ["#FF1216","#9E9E9E"], type: "Агентство CY", hue: 359 },
+  { name: "Index.cy", tier: 2, colors: ["#0F4392","#DD1717"], type: "Портал CY", hue: 218 },
+  { name: "BuySellCyprus", tier: 2, colors: ["#CC0000","#2E5BA3","#FFC320"], type: "Портал CY", hue: 0 },
+  { name: "Offer.com.cy", tier: 2, colors: ["#56CBDB","#5C7291"], type: "Портал CY", hue: 188 },
+  { name: "Home.cy", tier: 2, colors: ["#00A1F2","#19D9FF"], type: "Портал CY", hue: 200 },
+  { name: "Viotopo", tier: 2, colors: ["#2196F3","#1B3A5C"], type: "Маркетплейс CY", hue: 207 },
+  { name: "Realting", tier: 2, colors: ["#00CCAA","#EEF3FA"], type: "Междунар. (CY)", hue: 168 },
+  { name: "Tranio", tier: 2, colors: ["#1A237E","#3F51B5"], type: "Междунар. (CY)", hue: 232 },
+  { name: "Scala", tier: 3, colors: ["#003366","#0055A4"], type: "Агентство CY", hue: 210 },
+  { name: "BidX1", tier: 3, colors: ["#E63946","#1D3557"], type: "Аукцион", hue: 355 },
+  { name: "Sotheby's CY", tier: 3, colors: ["#002B5C","#B8860B"], type: "Люкс", hue: 212 },
+  { name: "RE/MAX CY", tier: 3, colors: ["#003DA5","#DC1C2E"], type: "Франшиза", hue: 220 },
+  { name: "Aristo", tier: 3, colors: ["#8B6914","#2C1810"], type: "Застройщик CY", hue: 42 },
+  { name: "Altamira", tier: 3, colors: ["#E31937","#1C1C1C"], type: "Банк. недвиж.", hue: 350 },
+  { name: "Meshiti", tier: 3, colors: ["#B8860B","#333333"], type: "Агентство CY", hue: 42 },
+  { name: "Ktimatagora", tier: 3, colors: ["#2E7D32","#1B5E20"], type: "Портал CY", hue: 125 },
+  { name: "Palourtis", tier: 3, colors: ["#8B4513","#DAA520"], type: "Агентство CY", hue: 28 },
+];
+
+// Sort: tier asc, then name asc
+const sorted = [...sites].sort((a, b) => a.tier - b.tier || a.name.localeCompare(b.name));
+
+// ---- TABLE ----
+const tbody = document.getElementById('tableBody');
+sorted.forEach((s, i) => {
+  const tr = document.createElement('tr');
+  const swatches = s.colors.map(c =>
+    `<div class="swatch" style="background:${c}"><span class="swatch-tooltip">${c}</span></div>`
+  ).join('');
+  tr.innerHTML = `
+    <td class="num">${i + 1}</td>
+    <td class="name-cell">${s.name}<span class="tier-badge tier-${s.tier}">T${s.tier}</span></td>
+    <td><div class="colors-cell">${swatches}</div></td>
+    <td class="hue-cell">${s.hue}&deg;</td>
+    <td class="type-cell">${s.type}</td>
+  `;
+  tbody.appendChild(tr);
+});
+
+// ---- WHEEL ----
+const wheel = document.getElementById('wheel');
+const cx = 250, cy = 250, mainR = 170;
+
+// Hue labels
+const hueLabels = [
+  { deg: 0, text: "Красный 0\u00B0" },
+  { deg: 30, text: "Оранжевый 30\u00B0" },
+  { deg: 60, text: "Жёлтый 60\u00B0" },
+  { deg: 90, text: "Лайм 90\u00B0" },
+  { deg: 120, text: "Зелёный 120\u00B0" },
+  { deg: 150, text: "Мятный 150\u00B0" },
+  { deg: 180, text: "Циан 180\u00B0" },
+  { deg: 210, text: "Голубой 210\u00B0" },
+  { deg: 240, text: "Синий 240\u00B0" },
+  { deg: 270, text: "Фиолет 270\u00B0" },
+  { deg: 300, text: "Пурпур 300\u00B0" },
+  { deg: 330, text: "Розовый 330\u00B0" },
+];
+
+const labelR = mainR + 38;
+hueLabels.forEach(h => {
+  const rad = (h.deg - 90) * Math.PI / 180;
+  const lx = cx + labelR * Math.cos(rad);
+  const ly = cy + labelR * Math.sin(rad);
+  const el = document.createElement('div');
+  el.className = 'hue-label';
+  el.style.left = lx + 'px';
+  el.style.top = ly + 'px';
+  el.textContent = h.text;
+  wheel.appendChild(el);
+});
+
+// Tier rings (subtle)
+[0.45, 0.65, 0.85].forEach(pct => {
+  const r = mainR * pct;
+  const ring = document.createElement('div');
+  ring.style.cssText = `position:absolute;width:${r*2}px;height:${r*2}px;border-radius:50%;border:1px solid rgba(255,255,255,.04);left:${cx-r}px;top:${cy-r}px;pointer-events:none;`;
+  wheel.appendChild(ring);
+});
+
+// Free zones
+const freeZonesData = [
+  { deg: 70, label: "Лайм ~70\u00B0" },
+  { deg: 110, label: "Изумрудный ~110\u00B0" },
+  { deg: 260, label: "Фиолет ~260\u00B0" },
+  { deg: 300, label: "Пурпур ~300\u00B0" },
+];
+
+freeZonesData.forEach(fz => {
+  const zoneR = 28;
+  const dist = mainR * 0.65;
+  const rad = (fz.deg - 90) * Math.PI / 180;
+  const zx = cx + dist * Math.cos(rad);
+  const zy = cy + dist * Math.sin(rad);
+
+  const circle = document.createElement('div');
+  circle.className = 'free-zone';
+  circle.style.width = zoneR * 2 + 'px';
+  circle.style.height = zoneR * 2 + 'px';
+  circle.style.left = (zx - zoneR) + 'px';
+  circle.style.top = (zy - zoneR) + 'px';
+  wheel.appendChild(circle);
+
+  const lbl = document.createElement('div');
+  lbl.className = 'free-zone-label';
+  const lblRad = (fz.deg - 90) * Math.PI / 180;
+  const lblDist = dist + zoneR + 14;
+  lbl.style.left = (cx + lblDist * Math.cos(lblRad)) + 'px';
+  lbl.style.top = (cy + lblDist * Math.sin(lblRad)) + 'px';
+  lbl.textContent = fz.label;
+  wheel.appendChild(lbl);
+});
+
+// Jitter map to avoid overlap
+const jitterMap = {};
+function getJitter(hue, tier) {
+  const key = hue + '-' + tier;
+  if (!jitterMap[key]) {
+    jitterMap[key] = { angle: 0, radius: 0, count: 0 };
+  }
+  const state = jitterMap[key];
+  const n = state.count;
+  state.count++;
+  // Spread overlapping dots
+  const angleJitter = n * 6 - (n > 0 ? 3 : 0);
+  const radiusJitter = n * 8 * (n % 2 === 0 ? 1 : -1);
+  return { angleDeg: angleJitter, radiusPx: radiusJitter };
+}
+
+// Brand dots
+const tierSizes = { 1: 36, 2: 26, 3: 18 };
+const tierRadii = { 1: 0.85, 2: 0.65, 3: 0.45 };
+
+// Pre-compute jitter by grouping similar hues within same tier
+const hueGroups = {};
+sites.forEach(s => {
+  const bucket = Math.round(s.hue / 5) * 5 + '-' + s.tier;
+  if (!hueGroups[bucket]) hueGroups[bucket] = [];
+  hueGroups[bucket].push(s);
+});
+
+Object.values(hueGroups).forEach(group => {
+  group.forEach((s, idx) => {
+    s._jitterAngle = idx * 7 - ((group.length - 1) * 3.5);
+    s._jitterRadius = idx * 6 * (idx % 2 === 0 ? 1 : -1);
+  });
+});
+
+sites.forEach(s => {
+  const size = tierSizes[s.tier];
+  const radiusPct = tierRadii[s.tier];
+  const r = mainR * radiusPct + (s._jitterRadius || 0);
+  const angleDeg = s.hue + (s._jitterAngle || 0);
+  const rad = (angleDeg - 90) * Math.PI / 180;
+  const dx = cx + r * Math.cos(rad);
+  const dy = cy + r * Math.sin(rad);
+
+  const dot = document.createElement('div');
+  dot.className = 'dot';
+  dot.style.width = size + 'px';
+  dot.style.height = size + 'px';
+  dot.style.background = s.colors[0];
+  dot.style.left = dx + 'px';
+  dot.style.top = dy + 'px';
+  dot.style.transform = 'translate(-50%, -50%)';
+  dot.title = `${s.name} (${s.hue}\u00B0) — ${s.type}`;
+
+  const label = document.createElement('div');
+  label.className = 'dot-label';
+  label.textContent = s.name;
+  dot.appendChild(label);
+
+  wheel.appendChild(dot);
+});
+
+// ---- SUMMARY ----
+const overloadedEl = document.getElementById('overloadedZones');
+const freeEl = document.getElementById('freeZones');
+
+// Overloaded zones
+const overloaded = [
+  {
+    range: "200\u00B0\u2013230\u00B0 (Синий / Голубой)",
+    desc: "Самая перегруженная зона кипрского рынка. Сразу 6 брендов используют оттенки синего, что затрудняет дифференциацию.",
+    brands: ["Home.cy", "Viotopo", "Index.cy", "Scala", "Sotheby's CY", "RE/MAX CY"],
+  },
+  {
+    range: "340\u00B0\u2013360\u00B0 (Красный)",
+    desc: "4 бренда конкурируют в красном спектре. DOM.com.cy (tier 1) доминирует, остальным сложно выделиться.",
+    brands: ["DOM.com.cy", "BuySellCyprus", "BidX1", "Altamira"],
+  },
+  {
+    range: "40\u00B0\u201350\u00B0 (Золотой / Жёлтый)",
+    desc: "Bazaraki (tier 1) занимает золотой, Aristo и Meshiti тоже в этой зоне. Конфликт с лидером.",
+    brands: ["Bazaraki", "Aristo", "Meshiti"],
+  },
+];
+
+overloaded.forEach(z => {
+  const card = document.createElement('div');
+  card.className = 'zone-card overloaded';
+  card.innerHTML = `
+    <div class="zone-title">${z.range}</div>
+    <div class="zone-desc">${z.desc}</div>
+    <div class="zone-brands">${z.brands.map(b => `<span class="zone-brand-tag">${b}</span>`).join('')}</div>
+  `;
+  overloadedEl.appendChild(card);
+});
+
+// Free zones with recommendations
+const freeRecs = [
+  {
+    range: "~70\u00B0 (Лайм / Жёлто-зелёный)",
+    desc: "Ноль конкурентов. Яркий, свежий лайм моментально привлечёт внимание. Подойдёт для молодого агентства или PropTech-стартапа.",
+    swatches: ["#8BC34A", "#AEEA00", "#C6FF00", "#7CB342"],
+  },
+  {
+    range: "~110\u00B0 (Изумрудный)",
+    desc: "Ktimatagora (125\u00B0) рядом, но один бренд не блокирует зону. Изумрудный ассоциируется с экологией, ростом и средиземноморской зеленью.",
+    swatches: ["#00C853", "#00E676", "#1DE9B6", "#00BFA5"],
+  },
+  {
+    range: "~260\u00B0 (Фиолетовый)",
+    desc: "Полностью свободна. Фиолетовый = премиум, инновации, технологии. Отличный выбор для digital-first платформы.",
+    swatches: ["#7C4DFF", "#B388FF", "#9C27B0", "#6A1B9A"],
+  },
+  {
+    range: "~300\u00B0 (Пурпурный / Маджента)",
+    desc: "Абсолютно пуста. Маджента = энергия + уникальность. Идеальна для платформы, которая хочет быть ни на кого не похожей.",
+    swatches: ["#E040FB", "#FF4081", "#F50057", "#D500F9"],
+  },
+];
+
+freeRecs.forEach(z => {
+  const card = document.createElement('div');
+  card.className = 'zone-card free';
+  const swatchHtml = z.swatches.map(c =>
+    `<div class="rec-swatch" style="background:${c}"><span class="swatch-tooltip">${c}</span></div>`
+  ).join('');
+  card.innerHTML = `
+    <div class="zone-title">${z.range}</div>
+    <div class="zone-desc">${z.desc}</div>
+    <div class="rec-swatch-row">${swatchHtml}</div>
+  `;
+  freeEl.appendChild(card);
+});
+</script>
+</body>
+</html>

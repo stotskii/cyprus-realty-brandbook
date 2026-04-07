@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyprus Real Estate — Международная арена</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0e12;
+    color: #e0e0e0;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  a { color: #7aa2f7; text-decoration: none; transition: color .2s; }
+  a:hover { color: #a9c4ff; }
+
+  /* ── NAV ── */
+  .nav {
+    display: flex;
+    gap: 24px;
+    padding: 16px 32px;
+    background: #13131a;
+    border-bottom: 1px solid #1e1e2a;
+    font-size: 14px;
+    align-items: center;
+  }
+  .nav .sep { color: #333; }
+  .nav .current { color: #c0caf5; font-weight: 600; }
+
+  /* ── HEADER ── */
+  .header {
+    text-align: center;
+    padding: 40px 32px 24px;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #c0caf5;
+    letter-spacing: -0.5px;
+  }
+  .header p {
+    margin-top: 8px;
+    font-size: 16px;
+    color: #565f89;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  .main {
+    display: flex;
+    gap: 40px;
+    padding: 0 32px 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* ── TABLE ── */
+  .table-col {
+    flex: 0 0 420px;
+    max-height: 640px;
+    overflow-y: auto;
+  }
+  .table-col::-webkit-scrollbar { width: 6px; }
+  .table-col::-webkit-scrollbar-track { background: transparent; }
+  .table-col::-webkit-scrollbar-thumb { background: #2a2a3a; border-radius: 3px; }
+
+  .section-label {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: #565f89;
+    padding: 12px 0 8px;
+    border-bottom: 1px solid #1e1e2a;
+    margin-bottom: 0;
+    position: sticky;
+    top: 0;
+    background: #0e0e12;
+    z-index: 2;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  thead th {
+    text-align: left;
+    padding: 8px 8px;
+    color: #565f89;
+    font-weight: 500;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-bottom: 1px solid #1a1a24;
+    position: sticky;
+    top: 38px;
+    background: #0e0e12;
+    z-index: 1;
+  }
+  tbody td {
+    padding: 6px 8px;
+    border-bottom: 1px solid #14141c;
+    vertical-align: middle;
+  }
+  tbody tr:hover { background: #16161e; }
+
+  .swatch-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .swatch {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    position: relative;
+    cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .swatch .tip {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1a1b26;
+    color: #c0caf5;
+    font-size: 11px;
+    font-family: 'DM Sans', monospace;
+    padding: 3px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    border: 1px solid #292e42;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .swatch:hover .tip { display: block; }
+
+  .td-hue { font-variant-numeric: tabular-nums; color: #7aa2f7; font-size: 12px; }
+  .td-type { color: #787c9e; font-size: 12px; }
+  .td-name { font-weight: 500; color: #c0caf5; }
+  .tier-badge {
+    display: inline-block;
+    font-size: 10px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    margin-left: 6px;
+    font-weight: 600;
+  }
+  .tier-1 { background: rgba(122,162,247,0.15); color: #7aa2f7; }
+  .tier-2 { background: rgba(86,203,219,0.1); color: #56cbdb; }
+  .tier-3 { background: rgba(120,124,158,0.12); color: #787c9e; }
+
+  /* ── WHEEL ── */
+  .wheel-col {
+    flex: 0 0 560px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  .wheel-wrap {
+    position: relative;
+    width: 520px;
+    height: 520px;
+  }
+
+  .wheel-bg {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg,
+      hsla(0,100%,50%,0.12),
+      hsla(30,100%,50%,0.12),
+      hsla(60,100%,50%,0.12),
+      hsla(90,100%,50%,0.12),
+      hsla(120,100%,50%,0.12),
+      hsla(150,100%,50%,0.12),
+      hsla(180,100%,50%,0.12),
+      hsla(210,100%,50%,0.12),
+      hsla(240,100%,50%,0.12),
+      hsla(270,100%,50%,0.12),
+      hsla(300,100%,50%,0.12),
+      hsla(330,100%,50%,0.12),
+      hsla(360,100%,50%,0.12)
+    );
+  }
+
+  /* tier rings */
+  .ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px dashed rgba(255,255,255,0.06);
+    pointer-events: none;
+  }
+
+  .hue-label {
+    position: absolute;
+    font-size: 10px;
+    color: #444;
+    font-weight: 500;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+  }
+
+  /* brand dots */
+  .dot {
+    position: absolute;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    transition: transform .15s, box-shadow .15s;
+    z-index: 3;
+  }
+  .dot:hover {
+    transform: translate(-50%, -50%) scale(1.25);
+    z-index: 10;
+  }
+  .dot.solid {
+    box-shadow: 0 0 8px rgba(0,0,0,0.5);
+  }
+  .dot.ring-style {
+    background: transparent !important;
+    box-shadow: none;
+  }
+
+  .dot-label {
+    position: absolute;
+    font-size: 9px;
+    font-weight: 500;
+    color: #a0a0b0;
+    white-space: nowrap;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    text-shadow: 0 0 4px #0e0e12, 0 0 8px #0e0e12, 0 0 12px #0e0e12;
+    z-index: 4;
+  }
+
+  .dot .dot-tip {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1a1b26;
+    color: #c0caf5;
+    font-size: 11px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    border: 1px solid #292e42;
+    z-index: 100;
+    pointer-events: none;
+    line-height: 1.4;
+  }
+  .dot:hover .dot-tip { display: block; }
+
+  /* free zone arcs */
+  .free-zone {
+    position: absolute;
+    border-radius: 50%;
+    border: 2px dashed rgba(80,220,120,0.45);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .legend {
+    display: flex;
+    gap: 24px;
+    font-size: 12px;
+    color: #565f89;
+    align-items: center;
+  }
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+
+  /* ── ANALYSIS ── */
+  .analysis {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 32px 60px;
+  }
+  .analysis-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #c0caf5;
+    margin-bottom: 8px;
+    padding-top: 24px;
+    border-top: 1px solid #1e1e2a;
+  }
+  .analysis-subtitle {
+    font-size: 14px;
+    color: #565f89;
+    margin-bottom: 24px;
+  }
+  .options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+  }
+  .option-card {
+    background: #13131a;
+    border: 1px solid #1e1e2a;
+    border-radius: 12px;
+    padding: 20px;
+    transition: border-color .2s;
+  }
+  .option-card:hover { border-color: #292e42; }
+  .option-card.best {
+    border-color: rgba(80,220,120,0.4);
+    background: linear-gradient(135deg, #13131a 0%, #141a14 100%);
+  }
+  .option-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .option-swatch {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .option-num {
+    font-size: 12px;
+    font-weight: 700;
+    color: #565f89;
+  }
+  .option-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #c0caf5;
+  }
+  .option-range {
+    font-size: 12px;
+    color: #7aa2f7;
+    font-variant-numeric: tabular-nums;
+  }
+  .option-body {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #9098b8;
+  }
+  .option-body strong { color: #c0caf5; font-weight: 600; }
+  .best-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    background: rgba(80,220,120,0.15);
+    color: #50dc78;
+    margin-left: auto;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="index.html">Index</a>
+  <span class="sep">/</span>
+  <a href="cyprus-only.html">Cyprus Only</a>
+  <span class="sep">/</span>
+  <span class="current">International</span>
+</nav>
+
+<!-- HEADER -->
+<header class="header">
+  <h1>Cyprus Real Estate — Международная арена</h1>
+  <p>Кипрские + мировые бренды недвижимости</p>
+</header>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- TABLE -->
+  <div class="table-col" id="tableCol"></div>
+
+  <!-- WHEEL -->
+  <div class="wheel-col">
+    <div class="wheel-wrap" id="wheel">
+      <div class="wheel-bg"></div>
+    </div>
+    <div class="legend">
+      <span><span class="legend-dot" style="background:#7aa2f7;"></span> Кипр (solid)</span>
+      <span><span class="legend-dot" style="background:transparent; border:2px solid #7aa2f7;"></span> International (ring)</span>
+      <span><span class="legend-dot" style="background:transparent; border:2px dashed rgba(80,220,120,0.5);"></span> Free zone</span>
+    </span>
+  </div>
+</div>
+
+<!-- ANALYSIS -->
+<section class="analysis">
+  <h2 class="analysis-title">Универсальный цвет: что свободно ВЕЗДЕ?</h2>
+  <p class="analysis-subtitle">Анализ свободных зон на цветовом круге с учётом всех рынков</p>
+  <div class="options-grid" id="analysisGrid"></div>
+</section>
+
+<script>
+// ── DATA ──
+const cyprusSites = [
+  { name: "Bazaraki", tier: 1, colors: ["#F8C300"], type: "CY #1", hue: 48 },
+  { name: "DOM.com.cy", tier: 1, colors: ["#FF1216"], type: "CY агентство", hue: 359 },
+  { name: "Index.cy", tier: 2, colors: ["#0F4392"], type: "CY портал", hue: 218 },
+  { name: "BuySellCyprus", tier: 2, colors: ["#CC0000"], type: "CY портал", hue: 0 },
+  { name: "Offer.com.cy", tier: 2, colors: ["#56CBDB"], type: "CY портал", hue: 188 },
+  { name: "Home.cy", tier: 2, colors: ["#00A1F2"], type: "CY портал", hue: 200 },
+  { name: "Viotopo", tier: 2, colors: ["#2196F3"], type: "CY маркетплейс", hue: 207 },
+  { name: "Ktimatagora", tier: 3, colors: ["#2E7D32"], type: "CY портал", hue: 125 },
+];
+
+const intlSites = [
+  { name: "Zillow", tier: 1, colors: ["#006AFF"], type: "US #1", hue: 215, market: "US" },
+  { name: "Realtor.com", tier: 1, colors: ["#D92228"], type: "US #2", hue: 358, market: "US" },
+  { name: "Redfin", tier: 1, colors: ["#A02021"], type: "US #3", hue: 0, market: "US" },
+  { name: "Trulia", tier: 2, colors: ["#5EAB1F"], type: "US портал", hue: 93, market: "US" },
+  { name: "Idealista", tier: 1, colors: ["#B42484"], type: "Испания", hue: 320, market: "EU" },
+  { name: "ImmoScout24", tier: 1, colors: ["#00FFD0"], type: "Германия", hue: 169, market: "EU" },
+  { name: "SeLoger", tier: 1, colors: ["#7B2D8E"], type: "Франция", hue: 285, market: "EU" },
+  { name: "Hemnet", tier: 1, colors: ["#00BF6F"], type: "Швеция", hue: 152, market: "EU" },
+  { name: "Funda", tier: 1, colors: ["#60C5F8"], type: "Нидерланды", hue: 200, market: "EU" },
+  { name: "PropertyGuru", tier: 1, colors: ["#C20000"], type: "Азия", hue: 0, market: "Asia" },
+  { name: "Property Finder", tier: 1, colors: ["#07D0FC"], type: "ОАЭ", hue: 191, market: "MENA" },
+  { name: "Bayut", tier: 2, colors: ["#00A651"], type: "ОАЭ #2", hue: 150, market: "MENA" },
+  { name: "Century 21", tier: 2, colors: ["#BEAF88"], type: "Глобальная", hue: 40, market: "Global" },
+  { name: "Coldwell Banker", tier: 2, colors: ["#003399"], type: "Глобальная", hue: 225, market: "Global" },
+  { name: "Savills", tier: 1, colors: ["#CC0033"], type: "UK+Global люкс", hue: 345, market: "Global" },
+  { name: "Knight Frank", tier: 1, colors: ["#D0103A"], type: "UK+Global люкс", hue: 348, market: "Global" },
+  { name: "CBRE", tier: 1, colors: ["#003F2D"], type: "Коммерция", hue: 160, market: "Global" },
+  { name: "Rightmove", tier: 1, colors: ["#00DEB6"], type: "UK #1", hue: 162, market: "UK" },
+  { name: "Zoopla", tier: 1, colors: ["#8046F1"], type: "UK #2", hue: 266, market: "UK" },
+  { name: "Spitogatos", tier: 2, colors: ["#428BCA"], type: "Греция", hue: 210, market: "EU" },
+];
+
+// ── TABLE ──
+function buildTable() {
+  const col = document.getElementById('tableCol');
+
+  function renderSection(title, data, showMarket) {
+    let html = `<div class="section-label">${title}</div>`;
+    html += `<table><thead><tr>
+      <th>Site</th><th>Color</th><th>Hue</th><th>${showMarket ? 'Market' : 'Type'}</th>
+    </tr></thead><tbody>`;
+    data.forEach(s => {
+      const c = s.colors[0];
+      const tierCls = `tier-${s.tier}`;
+      html += `<tr>
+        <td class="td-name">${s.name}<span class="tier-badge ${tierCls}">T${s.tier}</span></td>
+        <td><div class="swatch-cell">
+          <div class="swatch" style="background:${c}"><div class="tip">${c}</div></div>
+          <span style="color:${c};font-size:11px;font-family:monospace">${c}</span>
+        </div></td>
+        <td class="td-hue">${s.hue}°</td>
+        <td class="td-type">${showMarket && s.market ? s.market + ' — ' : ''}${s.type}</td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    return html;
+  }
+
+  col.innerHTML = renderSection('Кипрские бренды', cyprusSites, false)
+                 + renderSection('Международные бренды', intlSites, true);
+}
+
+// ── WHEEL ──
+function buildWheel() {
+  const wheel = document.getElementById('wheel');
+  const cx = 260, cy = 260;
+  const outerR = 220, midR = 165, innerR = 115;
+  const labelR = 248;
+
+  // tier rings
+  [outerR, midR, innerR].forEach(r => {
+    const ring = document.createElement('div');
+    ring.className = 'ring';
+    const d = r * 2;
+    ring.style.cssText = `width:${d}px;height:${d}px;left:${cx-r}px;top:${cy-r}px;`;
+    wheel.appendChild(ring);
+  });
+
+  // hue labels
+  for (let h = 0; h < 360; h += 30) {
+    const angle = (h - 90) * Math.PI / 180;
+    const x = cx + labelR * Math.cos(angle);
+    const y = cy + labelR * Math.sin(angle);
+    const lbl = document.createElement('div');
+    lbl.className = 'hue-label';
+    lbl.textContent = h + '°';
+    lbl.style.left = x + 'px';
+    lbl.style.top = y + 'px';
+    wheel.appendChild(lbl);
+  }
+
+  // free zones
+  const freeZones = [
+    { hueStart: 55, hueEnd: 65, label: '55-65°' },
+    { hueStart: 80, hueEnd: 90, label: '80-90°' },
+    { hueStart: 295, hueEnd: 310, label: '295-310°' },
+    { hueStart: 260, hueEnd: 275, label: '260-275°' },
+  ];
+  freeZones.forEach(z => {
+    const midHue = (z.hueStart + z.hueEnd) / 2;
+    const angle = (midHue - 90) * Math.PI / 180;
+    const r = midR;
+    const x = cx + r * Math.cos(angle);
+    const y = cy + r * Math.sin(angle);
+    const size = 44;
+    const el = document.createElement('div');
+    el.className = 'free-zone';
+    el.style.cssText = `width:${size}px;height:${size}px;left:${x - size/2}px;top:${y - size/2}px;`;
+    wheel.appendChild(el);
+  });
+
+  // seeded jitter
+  let jSeed = 42;
+  function jitter(range) {
+    jSeed = (jSeed * 16807 + 7) % 2147483647;
+    return (jSeed / 2147483647 - 0.5) * range;
+  }
+
+  // place dots
+  function placeDot(s, isCyprus) {
+    const radius = s.tier === 1 ? outerR : s.tier === 2 ? midR : innerR;
+    const dotSize = s.tier === 1 ? 32 : s.tier === 2 ? 24 : 16;
+    const hue = s.hue;
+    const angle = (hue - 90) * Math.PI / 180;
+    const r = radius + jitter(18);
+    const x = cx + r * Math.cos(angle) + jitter(8);
+    const y = cy + r * Math.sin(angle) + jitter(8);
+    const color = s.colors[0];
+
+    // dot element
+    const dot = document.createElement('div');
+    dot.className = 'dot ' + (isCyprus ? 'solid' : 'ring-style');
+    dot.style.width = dotSize + 'px';
+    dot.style.height = dotSize + 'px';
+    dot.style.left = x + 'px';
+    dot.style.top = y + 'px';
+
+    if (isCyprus) {
+      dot.style.background = color;
+    } else {
+      dot.style.border = `3px solid ${color}`;
+    }
+
+    // tooltip
+    const tip = document.createElement('div');
+    tip.className = 'dot-tip';
+    tip.innerHTML = `<strong>${s.name}</strong><br>${s.type}<br><span style="color:${color}">${color}</span> — ${hue}°`;
+    dot.appendChild(tip);
+    wheel.appendChild(dot);
+
+    // label
+    const labelOffset = dotSize / 2 + 10;
+    const labelAngle = (hue - 90) * Math.PI / 180;
+    const lx = x + labelOffset * Math.cos(labelAngle);
+    const ly = y + labelOffset * Math.sin(labelAngle);
+    const lbl = document.createElement('div');
+    lbl.className = 'dot-label';
+    lbl.textContent = s.name;
+    lbl.style.left = lx + 'px';
+    lbl.style.top = ly + 'px';
+    wheel.appendChild(lbl);
+  }
+
+  cyprusSites.forEach(s => placeDot(s, true));
+  intlSites.forEach(s => placeDot(s, false));
+}
+
+// ── ANALYSIS ──
+function buildAnalysis() {
+  const grid = document.getElementById('analysisGrid');
+  const options = [
+    {
+      num: 1,
+      title: 'Яркий жёлтый',
+      range: '~55-65°',
+      swatchColor: 'hsl(60, 95%, 55%)',
+      best: true,
+      text: 'Century 21 рядом на 40°, но это тусклое золото <strong>#BEAF88</strong>. Bazaraki на 48° — тоже жёлтый, но именно яркий лимонный <strong>55-65°</strong> свободен и на Кипре, и глобально. Ни один крупный портал не занимает этот диапазон. <strong>Максимальная видимость</strong> на любом рынке.'
+    },
+    {
+      num: 2,
+      title: 'Лайм',
+      range: '~80-90°',
+      swatchColor: 'hsl(85, 80%, 50%)',
+      best: false,
+      text: 'Trulia на 93° — но это US-only бренд. На Кипре этот диапазон <strong>полностью свободен</strong>. Яркий салатовый хорошо контрастирует с синим и красным, доминирующими на рынке.'
+    },
+    {
+      num: 3,
+      title: 'Пурпур',
+      range: '~295-310°',
+      swatchColor: 'hsl(302, 70%, 50%)',
+      best: false,
+      text: 'SeLoger на 285° (Франция), Idealista на 320° (Испания). Между ними — узкий, но <strong>яркий пурпурный зазор</strong>. На Кипре этот диапазон абсолютно пуст. Премиальное восприятие.'
+    },
+    {
+      num: 4,
+      title: 'Фиолетовый',
+      range: '~260-275°',
+      swatchColor: 'hsl(268, 65%, 55%)',
+      best: false,
+      text: 'Zoopla на 266° — но это <strong>UK-only</strong>. Если не считать британский рынок, глубокий фиолетовый свободен. На Кипре конкурентов в этом диапазоне нет вообще.'
+    }
+  ];
+
+  options.forEach(o => {
+    const card = document.createElement('div');
+    card.className = 'option-card' + (o.best ? ' best' : '');
+    card.innerHTML = `
+      <div class="option-header">
+        <div class="option-swatch" style="background:${o.swatchColor}"></div>
+        <div>
+          <div class="option-num">#${o.num}</div>
+          <div class="option-title">${o.title}</div>
+          <div class="option-range">${o.range}</div>
+        </div>
+        ${o.best ? '<span class="best-tag">Best Option</span>' : ''}
+      </div>
+      <div class="option-body">${o.text}</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ── INIT ──
+buildTable();
+buildWheel();
+buildAnalysis();
+</script>
+</body>
+</html>

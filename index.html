@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyprus Realty Brandbook — Color Analysis</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #0e0e12;
+    color: #e0e0e4;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .container {
+    max-width: 640px;
+    padding: 60px 32px;
+    text-align: center;
+  }
+  h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 48px;
+  }
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  a.card {
+    display: block;
+    padding: 24px;
+    border-radius: 10px;
+    border: 1px solid #222;
+    background: #14141a;
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+    text-align: left;
+  }
+  a.card:hover {
+    border-color: #444;
+    background: #1a1a22;
+  }
+  .card-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .badge-cy { background: #00A1F220; color: #00A1F2; }
+  .badge-intl { background: #D946EF20; color: #D946EF; }
+  .card-desc {
+    font-size: 13px;
+    color: #888;
+    line-height: 1.5;
+  }
+  .card-meta {
+    margin-top: 10px;
+    font-size: 11px;
+    color: #555;
+  }
+  .footer {
+    margin-top: 48px;
+    font-size: 11px;
+    color: #444;
+  }
+  .footer a { color: #666; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Cyprus Realty Brandbook</h1>
+  <p class="subtitle">Анализ фирменных цветов конкурентов на рынке недвижимости</p>
+
+  <div class="cards">
+    <a href="cyprus-only.html" class="card">
+      <div class="card-title">
+        Только Кипр
+        <span class="card-badge badge-cy">18 брендов</span>
+      </div>
+      <div class="card-desc">
+        Кипрские площадки и агентства: Bazaraki, DOM, Index, BuySellCyprus, Viotopo и другие.
+        Без UK и международных сайтов.
+      </div>
+      <div class="card-meta">Bazaraki, DOM.com.cy, Index.cy, Offer.com.cy, Home.cy, Viotopo, Scala, RE/MAX CY...</div>
+    </a>
+
+    <a href="international.html" class="card">
+      <div class="card-title">
+        Международная арена
+        <span class="card-badge badge-intl">28+ брендов</span>
+      </div>
+      <div class="card-desc">
+        Кипрские + мировые гиганты: Zillow, Rightmove, Zoopla, Idealista, ImmoScout24, Funda, PropertyGuru и другие.
+        Анализ универсального цвета для обоих рынков.
+      </div>
+      <div class="card-meta">+ Zillow, Realtor.com, Redfin, Idealista, SeLoger, Hemnet, PropertyGuru, Savills...</div>
+    </a>
+  </div>
+
+  <div class="footer">
+    <a href="data/brands.json">brands.json</a> &middot;
+    <a href="https://github.com/stotskii/cyprus-realty-brandbook">GitHub</a>
+  </div>
+</div>
+</body>
+</html>
