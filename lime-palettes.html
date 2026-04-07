@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lime Palettes — Cyprus Realty Brandbook</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #0e0e12;
+    color: #e0e0e4;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+  nav {
+    text-align: center;
+    margin-bottom: 32px;
+    font-size: 13px;
+  }
+  nav a {
+    color: #666;
+    text-decoration: none;
+    margin: 0 12px;
+  }
+  nav a:hover { color: #fff; }
+
+  h1 { text-align: center; font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .subtitle { text-align: center; font-size: 14px; color: #666; margin-bottom: 48px; }
+
+  .palettes {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+  }
+
+  .palette-card {
+    background: #14141a;
+    border: 1px solid #222;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .palette-card:hover { border-color: #444; }
+  .palette-card.recommended { border-color: #84cc1640; }
+  .palette-card.recommended .palette-tag { display: inline-block; }
+
+  .palette-strip {
+    display: flex;
+    height: 80px;
+  }
+  .palette-strip .swatch {
+    flex: 1;
+    position: relative;
+    cursor: pointer;
+    transition: flex 0.3s;
+  }
+  .palette-strip .swatch:hover { flex: 1.8; }
+  .palette-strip .swatch::after {
+    content: attr(data-hex);
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: #00000088;
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+  }
+  .palette-strip .swatch:hover::after { opacity: 1; }
+
+  /* Primary swatch is wider */
+  .palette-strip .swatch.primary { flex: 1.5; }
+
+  .palette-info {
+    padding: 16px 18px;
+  }
+  .palette-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .palette-tag {
+    display: none;
+    font-size: 9px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    background: #84cc1620;
+    color: #84cc16;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .palette-theory {
+    font-size: 11px;
+    color: #555;
+    margin-bottom: 6px;
+  }
+  .palette-desc {
+    font-size: 12px;
+    color: #888;
+    line-height: 1.5;
+  }
+  .palette-use {
+    margin-top: 8px;
+    font-size: 11px;
+    color: #666;
+  }
+  .palette-use strong { color: #999; }
+
+  /* Mini preview row */
+  .preview-row {
+    margin-top: 12px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .mini-btn {
+    padding: 5px 14px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    border: none;
+    cursor: default;
+  }
+  .mini-text {
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .mini-card {
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 500;
+  }
+
+  /* Section headers */
+  .section-header {
+    max-width: 1100px;
+    margin: 0 auto 16px;
+    padding-top: 32px;
+  }
+  .section-header:first-of-type { padding-top: 0; }
+  .section-header h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #aaa;
+  }
+  .section-header p {
+    font-size: 12px;
+    color: #555;
+    margin-top: 4px;
+  }
+
+  /* Dark/light preview */
+  .mode-previews {
+    max-width: 1100px;
+    margin: 48px auto 0;
+    padding: 24px;
+    background: #14141a;
+    border: 1px solid #222;
+    border-radius: 10px;
+  }
+  .mode-previews h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #84cc16;
+    margin-bottom: 16px;
+  }
+  .modes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .mode-box {
+    padding: 20px;
+    border-radius: 8px;
+    min-height: 120px;
+  }
+  .mode-box h3 {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .mode-box .btn-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .mode-box .btn {
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
+  }
+  .mode-box .link {
+    font-size: 12px;
+    text-decoration: underline;
+    cursor: default;
+  }
+  .mode-box .text {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">Главная</a>
+  <a href="cyprus-only.html">Только Кипр</a>
+  <a href="international.html">Международная</a>
+</nav>
+
+<h1>Лайм: комбинации с другими цветами</h1>
+<p class="subtitle">Базовый лайм ~80-85° + вариации пар и палитр для бренда недвижимости</p>
+
+<div class="section-header">
+  <h2>Комплементарные (контраст)</h2>
+  <p>Противоположные на цветовом круге — максимальный контраст и энергия</p>
+</div>
+<div class="palettes" id="complementary"></div>
+
+<div class="section-header">
+  <h2>Аналоговые (гармония)</h2>
+  <p>Соседние оттенки — мягко, природно, профессионально</p>
+</div>
+<div class="palettes" id="analogous"></div>
+
+<div class="section-header">
+  <h2>Триадные и сплит (баланс)</h2>
+  <p>Три цвета на равном расстоянии — яркие но сбалансированные</p>
+</div>
+<div class="palettes" id="triadic"></div>
+
+<div class="section-header">
+  <h2>С нейтралами (премиум)</h2>
+  <p>Лайм как акцент на строгом фоне — для серьёзного, премиального позиционирования</p>
+</div>
+<div class="palettes" id="neutrals"></div>
+
+<!-- Dark/Light mode preview -->
+<div class="mode-previews">
+  <h2>Как это выглядит в интерфейсе</h2>
+  <div class="modes-grid" id="modeGrid"></div>
+</div>
+
+<script>
+const palettes = {
+  complementary: [
+    {
+      name: "Лайм + Фиолет",
+      theory: "Комплементарная пара (85° ↔ 265°)",
+      colors: ["#84CC16", "#7C3AED", "#1a1a2e", "#f0f0f0"],
+      labels: ["Lime Primary", "Violet Accent", "Dark BG", "Light Text"],
+      desc: "Максимальный контраст. Лайм — энергия, фиолет — премиум. Запоминается моментально.",
+      use: "CTA-кнопки лайм, premium-секции фиолет, тёмный фон",
+      recommended: true,
+    },
+    {
+      name: "Лайм + Маджента",
+      theory: "Комплементарная (85° ↔ 305°)",
+      colors: ["#84CC16", "#D946EF", "#111118", "#e8e8ec"],
+      labels: ["Lime Primary", "Magenta Accent", "Dark BG", "Light Text"],
+      desc: "Дерзкий, tech-forward. Как стартап из Берлина.",
+      use: "Лайм основной, маджента для hover/alert, тёмные фоны",
+    },
+    {
+      name: "Лайм + Розовый",
+      theory: "Комплементарная (85° ↔ 330°)",
+      colors: ["#84CC16", "#F43F5E", "#0f0f14", "#ffffff"],
+      labels: ["Lime Primary", "Rose Accent", "Dark BG", "White"],
+      desc: "Яркий дуэт — природа + страсть. Необычный для недвижки, выделяет.",
+      use: "Лайм навигация, розовый для цен/важного, белый контент",
+    },
+  ],
+  analogous: [
+    {
+      name: "Лайм + Изумруд + Тил",
+      theory: "Аналоговые (75° → 85° → 160°)",
+      colors: ["#84CC16", "#10B981", "#0D9488", "#0f1a14"],
+      labels: ["Lime", "Emerald", "Teal", "Dark Green BG"],
+      desc: "Природная палитра. Кипр = зелень + море. Органично и свежо.",
+      use: "Лайм CTA, изумруд карточки, тил навигация",
+      recommended: true,
+    },
+    {
+      name: "Лайм + Жёлтый + Зелёный",
+      theory: "Аналоговые (55° → 85° → 120°)",
+      colors: ["#FACC15", "#84CC16", "#22C55E", "#1a1a12"],
+      labels: ["Yellow", "Lime", "Green", "Warm Dark"],
+      desc: "Тёплый градиент. Солнечно, как кипрское лето. Оптимистичный.",
+      use: "Градиент жёлтый→лайм для хедера, зелёный кнопки",
+    },
+    {
+      name: "Лайм + Бирюза",
+      theory: "Аналоговые (85° → 175°)",
+      colors: ["#84CC16", "#06B6D4", "#164E63", "#f0fdfa"],
+      labels: ["Lime", "Cyan", "Dark Cyan", "Light BG"],
+      desc: "Свежий и чистый. Зелень + вода = недвижимость у моря.",
+      use: "Лайм акценты, бирюза основной, тёмная бирюза фон секций",
+    },
+  ],
+  triadic: [
+    {
+      name: "Лайм + Синий + Коралл",
+      theory: "Триадная (85° → 205° → 325°)",
+      colors: ["#84CC16", "#3B82F6", "#F472B6", "#111827"],
+      labels: ["Lime", "Blue", "Coral Pink", "Slate BG"],
+      desc: "Три равноудалённых цвета. Весело, современно, tech-friendly.",
+      use: "Лайм primary, синий secondary, коралл для выделения цен",
+    },
+    {
+      name: "Лайм + Индиго + Амбер",
+      theory: "Сплит-комплементарная (85° ↔ 235°/305°)",
+      colors: ["#84CC16", "#6366F1", "#F59E0B", "#0c0c18"],
+      labels: ["Lime", "Indigo", "Amber", "Deep BG"],
+      desc: "Сложная, насыщенная. Лайм свежесть, индиго доверие, амбер тепло.",
+      use: "Лайм кнопки, индиго карточки, амбер бейджи/цены",
+    },
+    {
+      name: "Лайм + Слейт + Оранж",
+      theory: "Триадная модифицированная",
+      colors: ["#84CC16", "#475569", "#EA580C", "#f8fafc"],
+      labels: ["Lime", "Slate", "Orange", "Light BG"],
+      desc: "Серьёзный серый + два ярких акцента. Профессионально но не скучно.",
+      use: "Лайм primary, слейт тексты/карточки, оранж алерты/hot deals",
+    },
+  ],
+  neutrals: [
+    {
+      name: "Лайм + Антрацит",
+      theory: "Монохром + акцент",
+      colors: ["#84CC16", "#1E293B", "#334155", "#F1F5F9"],
+      labels: ["Lime Accent", "Dark Slate", "Mid Slate", "Light BG"],
+      desc: "Минимализм. Серьёзный тёмный фон, лайм только для акцентов. Премиально.",
+      use: "90% серый, лайм только кнопки/ссылки/иконки",
+      recommended: true,
+    },
+    {
+      name: "Лайм + Чёрный + Белый",
+      theory: "Ч/Б + акцент",
+      colors: ["#84CC16", "#0a0a0a", "#ffffff", "#e5e5e5"],
+      labels: ["Lime", "Near Black", "White", "Light Gray"],
+      desc: "Максимально чисто. Архитектурный стиль. Лайм как единственный цвет.",
+      use: "Белый/чёрный фон, лайм только для interactive элементов",
+    },
+    {
+      name: "Лайм + Тёплый серый",
+      theory: "Warm neutral + акцент",
+      colors: ["#84CC16", "#292524", "#78716C", "#FAF9F6"],
+      labels: ["Lime", "Stone Dark", "Stone Mid", "Warm White"],
+      desc: "Тёплый, уютный. Как зелень в каменном дворике. Средиземноморский вайб.",
+      use: "Тёплые нейтралы для контента, лайм для навигации и CTA",
+    },
+    {
+      name: "Лайм + Графит + Золото",
+      theory: "Luxury neutral + dual accent",
+      colors: ["#84CC16", "#1C1917", "#B8860B", "#E7E5E4"],
+      labels: ["Lime", "Charcoal", "Gold", "Warm Light"],
+      desc: "Люкс-вариант. Золото для premium-листингов, лайм для mass-market.",
+      use: "Два уровня: лайм аренда/продажа, золото luxury properties",
+    },
+  ],
+};
+
+// Render palettes
+function renderPalettes(containerId, items) {
+  const container = document.getElementById(containerId);
+  items.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'palette-card' + (p.recommended ? ' recommended' : '');
+    card.innerHTML = `
+      <div class="palette-strip">
+        ${p.colors.map((c, i) => `<div class="swatch${i===0?' primary':''}" style="background:${c}" data-hex="${c}"></div>`).join('')}
+      </div>
+      <div class="palette-info">
+        <div class="palette-name">
+          ${p.name}
+          <span class="palette-tag">Рекомендую</span>
+        </div>
+        <div class="palette-theory">${p.theory}</div>
+        <div class="palette-desc">${p.desc}</div>
+        <div class="palette-use"><strong>Применение:</strong> ${p.use}</div>
+        <div class="preview-row">
+          <span class="mini-btn" style="background:${p.colors[0]}; color:#000">Найти</span>
+          <span class="mini-btn" style="background:${p.colors[1]}; color:#fff">Подробнее</span>
+          <span class="mini-text" style="color:${p.colors[0]}">€285,000</span>
+          <span class="mini-card" style="background:${p.colors[3]||p.colors[2]}; color:${p.colors[2]||p.colors[1]}">3 bed</span>
+        </div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+renderPalettes('complementary', palettes.complementary);
+renderPalettes('analogous', palettes.analogous);
+renderPalettes('triadic', palettes.triadic);
+renderPalettes('neutrals', palettes.neutrals);
+
+// Mode previews
+const grid = document.getElementById('modeGrid');
+const bestPalettes = [
+  { name: "Dark + Антрацит", bg: "#1E293B", text: "#F1F5F9", accent: "#84CC16", secondary: "#334155", muted: "#94A3B8" },
+  { name: "Light + Тёплый", bg: "#FAF9F6", text: "#1C1917", accent: "#65A30D", secondary: "#E7E5E4", muted: "#78716C" },
+  { name: "Dark + Фиолет", bg: "#1a1a2e", text: "#e8e8ec", accent: "#84CC16", secondary: "#7C3AED", muted: "#8888aa" },
+  { name: "Light + Изумруд", bg: "#f0fdfa", text: "#0f1a14", accent: "#65A30D", secondary: "#0D9488", muted: "#5F8A7D" },
+];
+bestPalettes.forEach(p => {
+  const box = document.createElement('div');
+  box.className = 'mode-box';
+  box.style.cssText = `background:${p.bg}; color:${p.text};`;
+  box.innerHTML = `
+    <h3 style="color:${p.text}">${p.name}</h3>
+    <div class="btn-row">
+      <span class="btn" style="background:${p.accent}; color:#000">Поиск</span>
+      <span class="btn" style="background:${p.secondary}; color:#fff">Фильтры</span>
+    </div>
+    <div class="text" style="color:${p.muted}">
+      Limassol, 3-bed apartment &middot;
+      <span style="color:${p.accent}; font-weight:600">€285,000</span>
+      &middot; <span class="link" style="color:${p.accent}">Details</span>
+    </div>
+  `;
+  grid.appendChild(box);
+});
+</script>
+
+</body>
+</html>
